@@ -1,3 +1,5 @@
+from thesaurus import Word
+
 def combinations(startingWordsLength,iterable, r):
     '''
         Outputs all possible combinations of "r" number of words that are 15 characters long
@@ -104,7 +106,7 @@ def isWordInLetters(cLetters,vLetters1,vLetters2,input,output):
     successFile.close()
     return successWordsList
 
-def removeWord(word,constantLetters,variableLetters1,variableLetters2):
+def removeWord(word,cLetters,vLetters1,vLetters2):
     '''
         Removes the letters of a word from the available letters.
         args:
@@ -117,6 +119,12 @@ def removeWord(word,constantLetters,variableLetters1,variableLetters2):
         returns:
             constantLetters (array), variableLetters1 (array), variableLetters2 (array): The updated arrays with the proper letters removed
     '''
+    #This prevents the editing of lists that happens in this fuction from affecting the lists outside of the function
+    constantLetters = cLetters.copy()
+    variableLetters1 = vLetters1.copy()
+    variableLetters2 = vLetters2.copy()
+
+
     inWord = True
     word = word.strip()
     for letter in word:
@@ -157,18 +165,41 @@ def main():
     theme = ""
     startWords = ""
     while theme != "!":
-        theme = input("What word should the phrase include? (\"!\" to continue)")
+        theme = input("What word should the phrase include? (\"!\" to continue, \"?\" to see remaining letters)")
         if theme == "!":
             break
+
+        if theme == "?":
+            print("Letters remaining:")
+            print(constantLetters)
+            print(variableLetters1)
+            print(variableLetters2)
+
         newLetters = removeWord(theme,constantLetters,variableLetters1,variableLetters2)
-        if newLetters == "Word not in letters":
-            print("Choose another word")
-            #Eventually it should look for synonyms
-        else:
+
+        if newLetters != "Word not in letters":
             constantLetters = newLetters[0]
             variableLetters1 = newLetters[1]
             variableLetters2 = newLetters[2]
             startWords += theme
+        else:
+            print(theme + " doesn't work :/")
+            try:
+                w = Word(theme)
+                synonyms = w.synonyms()
+                for i in range(len(synonyms)):
+                    theme = synonyms[i]
+                    newLetters = removeWord(theme,constantLetters,variableLetters1,variableLetters2)
+                    if newLetters != "Word not in letters":
+                        print(theme + " was used instead")
+                        constantLetters = newLetters[0]
+                        variableLetters1 = newLetters[1]
+                        variableLetters2 = newLetters[2]
+                        startWords += theme
+                        break
+            except:
+                continue
+
 
     # Outputs words that only use the provided letters onto a file "successwords.txt"
     successWordsList = isWordInLetters(constantLetters,variableLetters1,variableLetters2,"WordBanks/mediumbank.txt","OutputFiles/successwords.txt")
