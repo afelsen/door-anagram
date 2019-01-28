@@ -168,7 +168,6 @@ def main():
         theme = input("What word should the phrase include? (\"!\" to continue, \"?\" to see remaining letters)")
         if theme == "!":
             break
-
         if theme == "?":
             print("Letters remaining:")
             print(constantLetters)

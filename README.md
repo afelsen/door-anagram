@@ -12,6 +12,7 @@ This program also allows the user to input a words to start the anagram with. In
 This program was created to find all possible anagrams that can be made with "Happy Halloween" stickers on our dorm door that were left over from October. Since certain letters could be flipped or turned to represent other letters, a regular anagram solver wouldn't cut it.
 
 ## Modules
+This code utilizes [thesaurus](https://pypi.org/project/thesaurus/) which is an unofficial api for thesaurus.com. 
 
 ## Word Banks Used
 * [Large Word Bank](https://github.com/dwyl/english-words/blob/master/words.txt)
